@@ -95,7 +95,7 @@ class ParallelOddEvenSort
         }
 
         // creating end of stage
-        var endStage = new ActionBlock<Tuple<int, int>>(range => { });//, new ExecutionDataflowBlockOptions { MaxDegreeOfParallelism = 1 });
+        var endStage = new ActionBlock<Tuple<int, int>>(range => { });
 
         // Link stages together to form the assembly line
         for (int i = 0; i < numStages - 1; i++)
@@ -108,7 +108,7 @@ class ParallelOddEvenSort
 
 
         int chunks = (arr.Length) / chunkSize;
-        var iterationsCount = arr.Length;//(arr.Length  / (numStages/2)); //* Math.Max(1,numStages - 1) )
+        var iterationsCount = arr.Length;
 
         if(numStages >5) iterationsCount/=(numStages/5);
         var watch = System.Diagnostics.Stopwatch.StartNew();
@@ -126,8 +126,6 @@ class ParallelOddEvenSort
                 Thread.Sleep(2);
             }
 
-            // Console.WriteLine("End stage messages" + endStage.InputCount);
-
         }
         // Signal completion to the first stage
         stages[0].Complete();
@@ -139,12 +137,7 @@ class ParallelOddEvenSort
         // the code that you want to measure comes here
         watch.Stop();
         return watch.ElapsedMilliseconds;
-        //Console.WriteLine(watch.ElapsedMilliseconds + " ms");
-
-        //Console.WriteLine(String.Join(' ', arr));
-        Console.WriteLine($"END.");
-
-
+  
 
     }
 
@@ -197,7 +190,7 @@ class ParallelOddEvenSort
 
 
         int chunks = (arr.Length) / chunkSize;
-        var iterationsCount = arr.Length;//(arr.Length / (numStages)) + 1; //* Math.Max(1,numStages - 1) )
+        var iterationsCount = arr.Length;
 
         var watch = System.Diagnostics.Stopwatch.StartNew();
 
@@ -227,7 +220,6 @@ class ParallelOddEvenSort
 
         // the code that you want to measure comes here
         watch.Stop();
-        //Console.WriteLine(watch.ElapsedMilliseconds + " ms");
         Console.WriteLine(String.Join(' ', arr));
         Console.WriteLine($"END.");
         return watch.ElapsedMilliseconds;
@@ -248,8 +240,6 @@ class ParallelOddEvenSort
 
     static void Main(string[] args)
     {
-        //Console.WriteLine(  SortChunkNodes(1, 5000) + "ms ");
-        //Console.WriteLine(SortCopyChunks(2, 50));
         
         long[] times = new long[33];
         for (int i = 0; i < times.Length; i++)
@@ -261,13 +251,11 @@ class ParallelOddEvenSort
         int[] numberOfStages = {1, 2, 4, 8, 12, 16, 20, 24, 28 };
        foreach (int stage in numberOfStages)
        {
-            //for (int i = 1; i <= 3; i++)
-            //{
-                // Console.WriteLine("Number of nodes n= " + j);
+
                 long t = SortChunkNodes(stage, chunkSize);
                 if (t < times[z])
                     times[z] = t;      
-           // }
+
             Console.WriteLine("Time for n = " + stage + " : " + times[z] + " ms");
             z++;
         }
